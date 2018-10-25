@@ -1,0 +1,54 @@
+scalar DateTime
+
+type AuthPayload {
+    token: String!
+    user: User!
+    createdAt: DateTime!
+}
+
+type User {
+    id: ID!
+    username: String!
+    password: String!
+    createdAt: DateTime!
+}
+
+type Message {
+    id: ID!
+    originator: User!
+    chatId: ID!
+    body: String!
+    createdAt: DateTime!
+}
+
+type Chat {
+    id: ID!
+    title: String
+    users: [User!]!
+    createdBy: User!
+    messages: [Message]!
+    createdAt: DateTime!
+}
+
+type Query {
+    me: User!
+    totalUserCount: Int!
+    chat(id: ID!): Chat!
+    chatUserCount(id: ID!): Int!
+    # Returns ids of chats that contain that user
+    userChats(userId: ID!): [ID!]!
+}
+
+type Mutation {
+    authenticateUser(username: String!, password: String!): AuthPayload!
+    registerUser(username: String!, password: String!): User!
+    deleteUser(username: String!): Boolean!
+    createChat(name: String, originatorId: ID!, users: [ID!]!): Chat!
+    deleteChat(chatId: String!): Boolean!
+    addUserToChat(chatId: ID!, userId: ID!): Chat!
+    sendMessage(chatId: ID!, body: String!): Chat!
+}
+
+type Subscription {
+    newMessage(chatId: ID!): Message!
+}
