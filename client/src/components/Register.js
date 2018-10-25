@@ -11,6 +11,9 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
+import { Mutation } from "react-apollo";
+
+import { MUTATION_REGISTER_USER } from "../gql";
 import { userAuthenticated } from "../utils";
 
 const styles = theme => ({
@@ -48,6 +51,47 @@ const styles = theme => ({
 });
 
 class Register extends Component {
+    state = {
+        username: "",
+        password: "",
+        password2: ""
+    };
+    handleFormChange = event => {
+        const { name, value } = event.target;
+        if (value) {
+            this.setState(() => ({ [name]: value }), console.log(this.state));
+        }
+    };
+    handleFormSubmit = event => {
+        const e = event;
+        e.preventDefault();
+    };
+    handleRegister = (event, register) => {
+        const { username, password, password2 } = this.state;
+
+        if (!password || !password2 || !username) {
+            alert("password or username field missing");
+        } else {
+            if (password !== password2) {
+                alert("passwords don't match");
+            } else {
+                register()
+                    .then(data => {
+                        if (data.data.registerUser.username) {
+                            alert(
+                                `You have been registered as ${
+                                    data.data.registerUser.username
+                                }. Please Log In`
+                            );
+                            this.props.history.push("/login");
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+        }
+    };
     componentDidMount() {
         if (userAuthenticated()) {
             this.props.history.push("/");
@@ -55,6 +99,7 @@ class Register extends Component {
     }
     render() {
         const { classes } = this.props;
+        const { username, password } = this.state;
 
         return (
             <React.Fragment>
@@ -67,16 +112,20 @@ class Register extends Component {
                         <Typography component="h1" variant="h5">
                             Register
                         </Typography>
-                        <form className={classes.form}>
+                        <form
+                            className={classes.form}
+                            onSubmit={this.handleFormSubmit}
+                        >
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="email">
                                     Username
                                 </InputLabel>
                                 <Input
-                                    id="email"
+                                    id="username"
                                     name="username"
                                     autoComplete="username"
                                     autoFocus
+                                    onChange={this.handleFormChange}
                                 />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
@@ -88,6 +137,7 @@ class Register extends Component {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={this.handleFormChange}
                                 />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
@@ -95,21 +145,37 @@ class Register extends Component {
                                     Verify Password
                                 </InputLabel>
                                 <Input
-                                    name="password"
+                                    name="password2"
                                     type="password"
                                     id="password2"
                                     autoComplete="current-password"
+                                    onChange={this.handleFormChange}
                                 />
                             </FormControl>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
+                            <Mutation
+                                mutation={MUTATION_REGISTER_USER}
+                                variables={{ username, password }}
                             >
-                                Register
-                            </Button>
+                                {register => {
+                                    return (
+                                        <Button
+                                            type="submit"
+                                            fullWidth
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.submit}
+                                            onClick={event =>
+                                                this.handleRegister(
+                                                    event,
+                                                    register
+                                                )
+                                            }
+                                        >
+                                            Register
+                                        </Button>
+                                    );
+                                }}
+                            </Mutation>
                         </form>
                     </Paper>
                 </main>

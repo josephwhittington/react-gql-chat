@@ -16,15 +16,15 @@ export const authenticateUser = (
             const { authenticateUser: authData } = data.data;
             setUserToken(authData.token);
             console.log("authData", authData);
+            dispatch({
+                type: AUTHENTICATE_USER
+            });
             history.push("/chat");
         })
         .catch(err => {
             console.log("err", err);
             handleAuthError(err);
         });
-    dispatch({
-        type: AUTHENTICATE_USER
-    });
 };
 
 export const authenticateUserIfTokenExists = () => dispatch => {
