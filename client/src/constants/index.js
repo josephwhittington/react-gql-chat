@@ -1,5 +1,6 @@
 // Action types
 export const AUTHENTICATE_USER = "AUTHENTICATE_USER";
+export const LOGOUT_USER = "LOGOUT_USER";
 
 // Localstorage variables
 export const LOCALSTORAGE_USER_TOKEN_LOCATION = "QUICK_CHAT_USER_TOKEN";

@@ -1,16 +1,22 @@
 import {
     AUTHENTICATE_USER,
+    LOGOUT_USER,
     LOCALSTORAGE_USER_TOKEN_LOCATION,
     ERROR_INCORRECT_USERNAME_OR_PASSWORD
 } from "../constants";
 
-export const authenticateUser = ({ username, password }, login) => dispatch => {
+export const authenticateUser = (
+    { username, password },
+    login,
+    history
+) => dispatch => {
     console.log(username, password);
     login()
         .then(data => {
             const { authenticateUser: authData } = data.data;
             setUserToken(authData.token);
             console.log("authData", authData);
+            history.push("/chat");
         })
         .catch(err => {
             console.log("err", err);
@@ -29,7 +35,12 @@ export const authenticateUserIfTokenExists = () => dispatch => {
     }
 };
 
-export const logout = () => {};
+export const deauthenticateUser = () => dispatch => {
+    localStorage.removeItem(LOCALSTORAGE_USER_TOKEN_LOCATION);
+    dispatch({
+        type: LOGOUT_USER
+    });
+};
 
 function setUserToken(token) {
     if (!token) {

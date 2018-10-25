@@ -9,7 +9,10 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import { connect } from "react-redux";
-import { authenticateUserIfTokenExists } from "../actions/authActions";
+import {
+    authenticateUserIfTokenExists,
+    deauthenticateUser
+} from "../actions/authActions";
 
 class Navigation extends Component {
     state = {
@@ -20,20 +23,27 @@ class Navigation extends Component {
     };
 
     handleClose = path => {
-        this.setState({ anchorEl: null });
+        this.setState(() => ({ anchorEl: null }));
         if (path) {
             switch (path) {
                 case "/":
                 case "/login":
                 case "/register":
+                case "/chat":
                     this.props.history.push(path);
+                    break;
+                case "/logout":
+                    this.logout();
                     break;
                 default:
                     break;
             }
         }
     };
-    logout = () => {};
+    logout = () => {
+        this.props.deauthenticateUser();
+        this.props.history.push("/");
+    };
     componentDidMount() {
         this.props.authenticateUserIfTokenExists();
     }
@@ -75,7 +85,9 @@ class Navigation extends Component {
                             </MenuItem>
                         )}
                         {userAuthenticated && (
-                            <MenuItem onClick={() => this.handleClose("/chat")}>
+                            <MenuItem
+                                onClick={() => this.handleClose("/logout")}
+                            >
                                 Logout
                             </MenuItem>
                         )}
@@ -99,5 +111,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { authenticateUserIfTokenExists }
+    { authenticateUserIfTokenExists, deauthenticateUser }
 )(Navigation);

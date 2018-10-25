@@ -73,9 +73,14 @@ class Login extends React.Component {
         }
 
         if (errors.length === 0) {
-            login().then(data => console.log("data", data));
-            this.props.authenticateUser({ username, password }, login);
-            this.props.history.push("/");
+            login()
+                .then(data => console.log("data", data))
+                .catch(err => console.log(err));
+            this.props.authenticateUser(
+                { username, password },
+                login,
+                this.props.history
+            );
         } else {
             this.setState(prevState => ({
                 errors: prevState.errors.concat(errors)
@@ -90,7 +95,7 @@ class Login extends React.Component {
     };
     componentDidMount() {
         if (userAuthenticated()) {
-            this.props.history.push("/");
+            this.props.history.push("/chat");
         }
     }
     render() {
