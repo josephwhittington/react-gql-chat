@@ -27,3 +27,22 @@ export const MUTATION_REGISTER_USER = gql`
         }
     }
 `;
+
+export const QUERY_GET_USER_CHATS = gql`
+    query getUserChats($userId: ID!) {
+        userChats(userId: $userId) {
+            id
+            title
+            users {
+                username
+            }
+            messages {
+                body
+                originator {
+                    username
+                }
+                createdAt
+            }
+        }
+    }
+`;

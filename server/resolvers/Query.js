@@ -8,6 +8,15 @@ module.exports = {
     async totalUserCount(parent, args, { db }) {
         return await db.collection("users").estimatedDocumentCount();
     },
+    async userChats(parent, { userId }, { db }) {
+        const chats = await db
+            .collection("chats")
+            .find({ "users._id": ObjectId(userId) })
+            .toArray();
+        console.log("user", userId);
+        console.log("chats", chats);
+        return chats;
+    },
     async chat(parent, { id }, { db }) {
         const chat = await db
             .collection("chats")

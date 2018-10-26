@@ -36,7 +36,7 @@ type Query {
     chat(id: ID!): Chat!
     chatUserCount(id: ID!): Int!
     # Returns ids of chats that contain that user
-    userChats(userId: ID!): [ID!]!
+    userChats(userId: ID!): [Chat!]!
 }
 
 type Mutation {
