@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 // import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 const customStyles = {
     messageLeft: {
@@ -19,22 +18,12 @@ const customStyles = {
         borderBottomRightRadius: 0,
         backgroundColor: "lightslategrey",
         color: "whitesmoke"
-    },
-    loading: {
-        display: "block",
-        margin: "0 auto"
     }
 };
 
 class ChatArea extends Component {
     render() {
         const { classes } = this.props;
-        // return (
-        //     <CircularProgress
-        //         className={classes.progress}
-        //         style={customStyles.loading}
-        //     />
-        // );
         return (
             <Fragment>
                 <Card style={customStyles.messageLeft}>

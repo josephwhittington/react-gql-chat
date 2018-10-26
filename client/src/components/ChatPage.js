@@ -5,6 +5,7 @@ import Card from "@material-ui/core/Card";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import DrawerComponent from "./Drawer";
 import ChatArea from "./ChatArea";
@@ -42,6 +43,10 @@ const customStyles = {
         marginLeft: -25,
         padding: 8,
         backgroundColor: "#ffffff"
+    },
+    loading: {
+        display: "block",
+        margin: "0 auto"
     }
 };
 
@@ -50,6 +55,13 @@ class PermanentDrawerLeft extends Component {
         const { classes } = this.props;
 
         const conversations = [];
+
+        return (
+            <CircularProgress
+                className={classes.progress}
+                style={customStyles.loading}
+            />
+        );
 
         return (
             <div className={classes.root}>
