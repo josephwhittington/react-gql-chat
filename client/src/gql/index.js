@@ -32,11 +32,12 @@ export const QUERY_GET_USER_CHATS = gql`
     query getUserChats($userId: ID!) {
         userChats(userId: $userId) {
             id
-            title
+            name
             users {
                 username
             }
             messages {
+                id
                 body
                 originator {
                     username

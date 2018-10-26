@@ -23,7 +23,7 @@ type Message {
 
 type Chat {
     id: ID!
-    title: String
+    name: String
     users: [User!]!
     createdBy: User!
     messages: [Message]!

@@ -1,11 +1,10 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 // import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import ListItemText from "@material-ui/core/ListItemText";
+
+import ListItem from "./ListItem";
 
 class DrawerComponent extends Component {
     state = {
@@ -24,72 +23,12 @@ class DrawerComponent extends Component {
             >
                 <List>
                     <ListSubheader>Conversations</ListSubheader>
-                    {conversations &&
-                        Array.isArray(conversations) && (
-                            <Fragment>
-                                <ListItem
-                                    button
-                                    selected={this.state.selectedIndex === 1}
-                                    onClick={event =>
-                                        this.handleListItemClick(event, 0)
-                                    }
-                                >
-                                    <ListItemText>
-                                        Selected Conversation
-                                    </ListItemText>
-                                </ListItem>
-                                <Divider />
-                                <ListItem
-                                    button
-                                    selected={this.state.selectedIndex === 0}
-                                    onClick={event =>
-                                        this.handleListItemClick(event, 0)
-                                    }
-                                >
-                                    <ListItemText>Conversation</ListItemText>
-                                </ListItem>
-                                <Divider />
-                                <ListItem
-                                    button
-                                    selected={this.state.selectedIndex === 0}
-                                    onClick={event =>
-                                        this.handleListItemClick(event, 0)
-                                    }
-                                >
-                                    <ListItemText>Conversation</ListItemText>
-                                </ListItem>
-                                <Divider />
-                                <ListItem
-                                    button
-                                    selected={this.state.selectedIndex === 0}
-                                    onClick={event =>
-                                        this.handleListItemClick(event, 0)
-                                    }
-                                >
-                                    <ListItemText>Conversation</ListItemText>
-                                </ListItem>
-                                <Divider />
-                                <ListItem
-                                    button
-                                    selected={this.state.selectedIndex === 0}
-                                    onClick={event =>
-                                        this.handleListItemClick(event, 0)
-                                    }
-                                >
-                                    <ListItemText>Conversation</ListItemText>
-                                </ListItem>
-                                <Divider />
-                                <ListItem
-                                    button
-                                    selected={this.state.selectedIndex === 0}
-                                    onClick={event =>
-                                        this.handleListItemClick(event, 0)
-                                    }
-                                >
-                                    <ListItemText>Conversation</ListItemText>
-                                </ListItem>
-                            </Fragment>
-                        )}
+                    {conversations.map(conversation => (
+                        <ListItem
+                            key={conversation.id}
+                            conversation={conversation.name}
+                        />
+                    ))}
                 </List>
             </Drawer>
         );
