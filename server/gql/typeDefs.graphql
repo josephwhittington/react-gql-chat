@@ -50,5 +50,5 @@ type Mutation {
 }
 
 type Subscription {
-    newMessage(chatId: ID!): Message!
+    newMessage(chatIds: [ID!]!): Message!
 }
