@@ -4,7 +4,8 @@ import thunk from "redux-thunk";
 import rootReducer from "../reducers";
 
 const initialState = {
-    isAuthenticated: false
+    isAuthenticated: false,
+    chat: {}
 };
 
 const middleware = [thunk];

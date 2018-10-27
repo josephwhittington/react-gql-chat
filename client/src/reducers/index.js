@@ -1,5 +1,7 @@
 import { combineReducers } from "redux";
 
+import chatReducer from "./chatReducer";
+
 import { AUTHENTICATE_USER, LOGOUT_USER } from "../constants";
 
 export default combineReducers({
@@ -12,5 +14,6 @@ export default combineReducers({
             default:
                 return false;
         }
-    }
+    },
+    chat: chatReducer
 });
