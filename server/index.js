@@ -37,14 +37,25 @@ async function start() {
     const server = new ApolloServer({
         typeDefs,
         resolvers,
+        subscriptions: {
+            path: "/subscription",
+            onConnect: connection => {
+                console.log("connected");
+            },
+            onDisconnect: () => {
+                console.log("disconeccted");
+            }
+        },
         context: async ({ req, connection }) => {
+            if (connection) {
+                console.log("connection", connection);
+            }
             const token = req
                 ? req.headers.authorization
                 : connection.context.authorization;
             let currentUser = null;
             if (token) {
                 currentUser = jwt.decode(token, config.secret).user;
-                console.log("currentUser", currentUser);
             }
             let err = null;
 

@@ -10,16 +10,19 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import DrawerComponent from "./Drawer";
 import ChatArea from "./ChatArea";
 
-import { Query } from "react-apollo";
+import { Query, Subscription } from "react-apollo";
 import { connect } from "react-redux";
 import { setCurrentChatId } from "../actions/chatActions";
 
-import { QUERY_GET_USER_CHATS } from "../gql";
+import { QUERY_GET_USER_CHATS, SUBSCRIPTION_NEW_MESSAGE } from "../gql";
 import { LOCALSTORAGE_USER_ID_LOCATION } from "../constants";
 
 class PermanentDrawerLeft extends Component {
     state = {
         userId: null
+    };
+    onSubscriptionData = data => {
+        console.log("subscriptiondata", data);
     };
     sendMessage = () => {
         alert("woah there clicky");
@@ -55,47 +58,74 @@ class PermanentDrawerLeft extends Component {
                     } else if (data) {
                         const messages = data.userChats[0].messages;
                         const conversations = data.userChats;
+
                         return (
-                            <div className={classes.root}>
-                                <DrawerComponent
-                                    classes={classes}
-                                    conversations={conversations}
-                                    currentChatId={
-                                        currentChatId
-                                            ? currentChatId
-                                            : data.userChats[0].id
-                                    }
-                                    setSelectedChat={this.setSelectedChat}
-                                />
-                                <main className={classes.content}>
-                                    <ChatArea
-                                        userId={userId}
-                                        messages={messages}
-                                        currentChatId={
-                                            currentChatId && currentChatId
-                                        }
-                                    />
-                                    <Card style={customStyles.messageInputDock}>
-                                        <TextField
-                                            id="standard-with-placeholder"
-                                            label="Send Message"
-                                            placeholder="Message"
-                                            className={classes.messageArea}
-                                            fullWidth
-                                            margin="normal"
-                                            multiline
-                                        />
-                                        <Button
-                                            variant="fab"
-                                            aria-label="Send"
-                                            className={classes.button}
-                                            onClick={this.sendMessage}
-                                        >
-                                            <SendIcon />
-                                        </Button>
-                                    </Card>
-                                </main>
-                            </div>
+                            <Subscription
+                                subscription={SUBSCRIPTION_NEW_MESSAGE}
+                                variables={{
+                                    chatIds: data.userChats.map(item => item.id)
+                                }}
+                                onSubscriptionData={this.onSubscriptionData}
+                            >
+                                {thing => {
+                                    console.log("thing", thing);
+                                    return (
+                                        <div className={classes.root}>
+                                            <DrawerComponent
+                                                classes={classes}
+                                                conversations={conversations}
+                                                currentChatId={
+                                                    currentChatId
+                                                        ? currentChatId
+                                                        : data.userChats[0].id
+                                                }
+                                                setSelectedChat={
+                                                    this.setSelectedChat
+                                                }
+                                            />
+                                            <main className={classes.content}>
+                                                <ChatArea
+                                                    userId={userId}
+                                                    messages={messages}
+                                                    currentChatId={
+                                                        currentChatId &&
+                                                        currentChatId
+                                                    }
+                                                />
+                                                <Card
+                                                    style={
+                                                        customStyles.messageInputDock
+                                                    }
+                                                >
+                                                    <TextField
+                                                        id="standard-with-placeholder"
+                                                        label="Send Message"
+                                                        placeholder="Message"
+                                                        className={
+                                                            classes.messageArea
+                                                        }
+                                                        fullWidth
+                                                        margin="normal"
+                                                        multiline
+                                                    />
+                                                    <Button
+                                                        variant="fab"
+                                                        aria-label="Send"
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                        onClick={
+                                                            this.sendMessage
+                                                        }
+                                                    >
+                                                        <SendIcon />
+                                                    </Button>
+                                                </Card>
+                                            </main>
+                                        </div>
+                                    );
+                                }}
+                            </Subscription>
                         );
                     }
                 }}
