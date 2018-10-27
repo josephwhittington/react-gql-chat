@@ -13,8 +13,6 @@ module.exports = {
             .collection("chats")
             .find({ "users._id": ObjectId(userId) })
             .toArray();
-        console.log("user", userId);
-        console.log("chats", chats);
         return chats;
     },
     async chat(parent, { id }, { db }) {

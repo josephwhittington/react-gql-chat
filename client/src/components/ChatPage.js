@@ -7,13 +7,98 @@ import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { Query } from "react-apollo";
-
 import DrawerComponent from "./Drawer";
 import ChatArea from "./ChatArea";
 
+import { Query } from "react-apollo";
+import { connect } from "react-redux";
+import { setCurrentChatId } from "../actions/chatActions";
+
 import { QUERY_GET_USER_CHATS } from "../gql";
 import { LOCALSTORAGE_USER_ID_LOCATION } from "../constants";
+
+class PermanentDrawerLeft extends Component {
+    state = {
+        userId: null
+    };
+    sendMessage = () => {
+        alert("woah there clicky");
+    };
+    setSelectedChat = index => {
+        alert(`id: ${index}`);
+        this.props.setCurrentChatId(index);
+    };
+    componentDidMount() {
+        this.setState(() => ({
+            userId: localStorage.getItem(LOCALSTORAGE_USER_ID_LOCATION)
+        }));
+    }
+    render() {
+        const { classes, currentChatId } = this.props;
+        const { userId } = this.state;
+
+        return (
+            <Query
+                query={QUERY_GET_USER_CHATS}
+                onCompleted={this.queryReturned}
+                variables={{
+                    userId
+                }}
+            >
+                {({ loading, data }) => {
+                    if (loading) {
+                        return (
+                            <CircularProgress
+                                className={classes.progress}
+                                style={customStyles.loading}
+                            />
+                        );
+                    } else if (data) {
+                        const messages = data.userChats[0].messages;
+                        const conversations = data.userChats;
+                        return (
+                            <div className={classes.root}>
+                                <DrawerComponent
+                                    classes={classes}
+                                    conversations={conversations}
+                                    setSelectedChat={this.setSelectedChat}
+                                />
+                                <main className={classes.content}>
+                                    <ChatArea
+                                        userId={userId}
+                                        messages={messages}
+                                        currentChatId={
+                                            currentChatId && currentChatId
+                                        }
+                                    />
+                                    <Card style={customStyles.messageInputDock}>
+                                        <TextField
+                                            id="standard-with-placeholder"
+                                            label="Send Message"
+                                            placeholder="Message"
+                                            className={classes.messageArea}
+                                            fullWidth
+                                            margin="normal"
+                                            multiline
+                                        />
+                                        <Button
+                                            variant="fab"
+                                            aria-label="Send"
+                                            className={classes.button}
+                                            onClick={this.sendMessage}
+                                        >
+                                            <SendIcon />
+                                        </Button>
+                                    </Card>
+                                </main>
+                            </div>
+                        );
+                    }
+                }}
+            </Query>
+        );
+    }
+}
 
 const drawerWidth = 300;
 
@@ -56,83 +141,15 @@ const customStyles = {
     }
 };
 
-class PermanentDrawerLeft extends Component {
-    state = {
-        userId: null
-    };
-    sendMessage = () => {
-        alert("woah there clicky");
-    };
-    componentDidMount() {
-        this.setState(() => ({
-            userId: localStorage.getItem(LOCALSTORAGE_USER_ID_LOCATION)
-        }));
-    }
-    render() {
-        const { classes } = this.props;
-        const { userId } = this.state;
-
-        return (
-            <Query
-                query={QUERY_GET_USER_CHATS}
-                onCompleted={this.queryReturned}
-                variables={{
-                    userId
-                }}
-            >
-                {({ loading, data }) => {
-                    if (loading) {
-                        return (
-                            <CircularProgress
-                                className={classes.progress}
-                                style={customStyles.loading}
-                            />
-                        );
-                    } else if (data) {
-                        const messages = data.userChats[0].messages;
-                        const conversations = data.userChats;
-                        return (
-                            <div className={classes.root}>
-                                <DrawerComponent
-                                    classes={classes}
-                                    conversations={conversations}
-                                />
-                                <main className={classes.content}>
-                                    <ChatArea
-                                        userId={userId}
-                                        messages={messages}
-                                    />
-                                    <Card style={customStyles.messageInputDock}>
-                                        <TextField
-                                            id="standard-with-placeholder"
-                                            label="Send Message"
-                                            placeholder="Message"
-                                            className={classes.messageArea}
-                                            fullWidth
-                                            margin="normal"
-                                            multiline
-                                        />
-                                        <Button
-                                            variant="fab"
-                                            aria-label="Send"
-                                            className={classes.button}
-                                            onClick={this.sendMessage}
-                                        >
-                                            <SendIcon />
-                                        </Button>
-                                    </Card>
-                                </main>
-                            </div>
-                        );
-                    }
-                }}
-            </Query>
-        );
-    }
-}
-
 PermanentDrawerLeft.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(PermanentDrawerLeft);
+const mapStateToProps = state => ({
+    currentChatId: state.chat.currentChatId
+});
+
+export default connect(
+    mapStateToProps,
+    { setCurrentChatId }
+)(withStyles(styles)(PermanentDrawerLeft));

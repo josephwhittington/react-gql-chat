@@ -160,7 +160,7 @@ module.exports = {
             // Construct message object
             const message = {
                 _id,
-                originator: currentUser.user,
+                originator: currentUser,
                 chatId: ObjectId(chatId),
                 body,
                 createdAt: new Date()

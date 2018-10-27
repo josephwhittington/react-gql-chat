@@ -48,3 +48,24 @@ export const QUERY_GET_USER_CHATS = gql`
         }
     }
 `;
+
+export const QUERY_GET_CHAT = gql`
+    query getChat($id: ID!) {
+        chat(id: $id) {
+            id
+            name
+            users {
+                username
+            }
+            messages {
+                id
+                body
+                originator {
+                    id
+                    username
+                }
+                createdAt
+            }
+        }
+    }
+`;
