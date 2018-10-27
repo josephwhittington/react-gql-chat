@@ -4,7 +4,6 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
-// import Modal from "react-awesome-modal";
 import Modal from "react-modal";
 
 import { Mutation } from "react-apollo";
@@ -63,11 +62,11 @@ class ModalComponent extends Component {
             .then(data => {
                 const mData = data.data.createChat;
                 console.log("mutation data", mData);
-                this.props.history.push("/");
             })
             .catch(err => {
                 console.log(err);
             });
+        window.location.reload();
     };
     render() {
         const { closeModal, visible } = this.props;
