@@ -1,22 +1,40 @@
 import React, { Component } from "react";
-// import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 
 import ListItem from "./ListItem";
+import Modal from "./Modal";
 
 class DrawerComponent extends Component {
     state = {
-        selectedIndex: 1
+        selectedIndex: 1,
+        visible: false
+    };
+    createNewChat = createChat => {
+        alert(`clicked ${typeof createChat}`);
+    };
+    openModal = () => {
+        this.setState({
+            visible: true
+        });
+    };
+
+    closeModal = () => {
+        this.setState({
+            visible: false
+        });
     };
     render() {
         const {
             classes,
             conversations,
             setSelectedChat,
-            currentChatId
+            currentChatId,
+            history
         } = this.props;
+
+        const { visible } = this.state;
 
         return (
             <Drawer
@@ -33,7 +51,7 @@ class DrawerComponent extends Component {
                         key={0}
                         selectedIndex={currentChatId}
                         conversation={"Start Chat (+)"}
-                        onClick={() => alert("clicked")}
+                        onClick={this.openModal}
                     />
                     {conversations.map(conversation => (
                         <ListItem
@@ -45,6 +63,13 @@ class DrawerComponent extends Component {
                         />
                     ))}
                 </List>
+                {
+                    <Modal
+                        closeModal={this.closeModal}
+                        history={history}
+                        visible={visible}
+                    />
+                }
             </Drawer>
         );
     }

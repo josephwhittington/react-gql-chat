@@ -36,7 +36,7 @@ class PermanentDrawerLeft extends Component {
         }));
     }
     render() {
-        const { classes, currentChatId } = this.props;
+        const { classes, currentChatId, history } = this.props;
         const { userId } = this.state;
 
         return (
@@ -74,6 +74,7 @@ class PermanentDrawerLeft extends Component {
                                             <DrawerComponent
                                                 classes={classes}
                                                 conversations={conversations}
+                                                history={history}
                                                 currentChatId={
                                                     currentChatId
                                                         ? currentChatId

@@ -54,10 +54,13 @@ class Navigation extends Component {
         const { anchorEl } = this.state;
         const { isAuthenticated: userAuthenticated } = this.props;
         return (
-            <AppBar>
+            <AppBar style={{ zIndex: 1000 }}>
                 <Toolbar>
                     <IconButton color="inherit" aria-label="Menu">
-                        <MenuIcon onClick={this.handleClick} />
+                        <MenuIcon
+                            style={{ zIndex: 1000 }}
+                            onClick={this.handleClick}
+                        />
                     </IconButton>
                     <Menu
                         id="simple-menu"

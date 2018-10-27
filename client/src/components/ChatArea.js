@@ -10,7 +10,7 @@ class ChatArea extends Component {
     render() {
         const { messages, userId, currentChatId } = this.props;
         let renderMessages = messages;
-        console.log("props", this.props);
+
         return (
             <Query
                 query={QUERY_GET_CHAT}
@@ -30,7 +30,19 @@ class ChatArea extends Component {
                             {!renderMessages ||
                                 (renderMessages.length === 0 && (
                                     <div style={{ textAlign: "center" }}>
-                                        😂😂 No Messages, Ha ha neeerrd! 😂😂
+                                        <span
+                                            role="img"
+                                            aria-labelledby="two cry laughing emojis"
+                                        >
+                                            😂😂
+                                        </span>{" "}
+                                        No Messages, Ha ha neeerrd!{" "}
+                                        <span
+                                            role="img"
+                                            aria-labelledby="two cry laughing emojis"
+                                        >
+                                            😂😂
+                                        </span>
                                     </div>
                                 ))}
                             {renderMessages.map(item => (

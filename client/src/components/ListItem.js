@@ -5,7 +5,7 @@ import { Divider } from "@material-ui/core";
 
 const ListItemComponent = props => {
     const { id, conversation, setSelectedChat, selectedIndex, onClick } = props;
-    console.log("props", props);
+
     return (
         <Fragment>
             <Divider />
