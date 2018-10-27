@@ -4,15 +4,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Divider } from "@material-ui/core";
 
 const ListItemComponent = props => {
-    const { id, conversation, setSelectedChat, selectedIndex } = props;
-    console.log(selectedIndex, id);
+    const { id, conversation, setSelectedChat, selectedIndex, onClick } = props;
+    console.log("props", props);
     return (
         <Fragment>
             <Divider />
             <ListItem
                 button
                 selected={selectedIndex === id}
-                onClick={event => setSelectedChat(id)}
+                onClick={onClick ? onClick : event => setSelectedChat(id)}
             >
                 <ListItemText>{conversation}</ListItemText>
             </ListItem>

@@ -29,6 +29,12 @@ class DrawerComponent extends Component {
             >
                 <List>
                     <ListSubheader>Conversations</ListSubheader>
+                    <ListItem
+                        key={0}
+                        selectedIndex={currentChatId}
+                        conversation={"Start Chat (+)"}
+                        onClick={() => alert("clicked")}
+                    />
                     {conversations.map(conversation => (
                         <ListItem
                             key={conversation.id}
