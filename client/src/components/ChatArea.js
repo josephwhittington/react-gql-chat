@@ -22,8 +22,6 @@ class ChatArea extends Component {
                         return "loading";
                     }
                     if (data) {
-                        alert("data");
-                        console.log("data", data);
                         renderMessages = data.chat.messages;
                     }
 

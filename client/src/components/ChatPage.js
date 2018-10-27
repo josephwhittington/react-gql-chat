@@ -25,7 +25,6 @@ class PermanentDrawerLeft extends Component {
         alert("woah there clicky");
     };
     setSelectedChat = index => {
-        alert(`id: ${index}`);
         this.props.setCurrentChatId(index);
     };
     componentDidMount() {
@@ -61,6 +60,11 @@ class PermanentDrawerLeft extends Component {
                                 <DrawerComponent
                                     classes={classes}
                                     conversations={conversations}
+                                    currentChatId={
+                                        currentChatId
+                                            ? currentChatId
+                                            : data.userChats[0].id
+                                    }
                                     setSelectedChat={this.setSelectedChat}
                                 />
                                 <main className={classes.content}>

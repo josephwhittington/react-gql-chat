@@ -11,7 +11,13 @@ class DrawerComponent extends Component {
         selectedIndex: 1
     };
     render() {
-        const { classes, conversations, setSelectedChat } = this.props;
+        const {
+            classes,
+            conversations,
+            setSelectedChat,
+            currentChatId
+        } = this.props;
+
         return (
             <Drawer
                 className={classes.drawer}
@@ -27,6 +33,7 @@ class DrawerComponent extends Component {
                         <ListItem
                             key={conversation.id}
                             id={conversation.id}
+                            selectedIndex={currentChatId}
                             conversation={conversation.name}
                             setSelectedChat={setSelectedChat}
                         />

@@ -5,12 +5,13 @@ import { Divider } from "@material-ui/core";
 
 const ListItemComponent = props => {
     const { id, conversation, setSelectedChat, selectedIndex } = props;
+    console.log(selectedIndex, id);
     return (
         <Fragment>
             <Divider />
             <ListItem
                 button
-                selected={selectedIndex === 0}
+                selected={selectedIndex === id}
                 onClick={event => setSelectedChat(id)}
             >
                 <ListItemText>{conversation}</ListItemText>
