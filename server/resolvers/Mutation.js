@@ -73,6 +73,10 @@ module.exports = {
         }
         // Look up users and add them to the users array
         const userArray = [];
+        // Add originator to the user thing
+        if (user) {
+            userArray.push(user);
+        }
         for (u of users) {
             let u_lookup = await db
                 .collection("users")
