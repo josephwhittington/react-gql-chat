@@ -27,6 +27,12 @@ class ChatArea extends Component {
 
                     return (
                         <Fragment>
+                            {!renderMessages ||
+                                (renderMessages.length === 0 && (
+                                    <div style={{ textAlign: "center" }}>
+                                        No Messages, Ha ha neeerrd! 😂😂😂😂
+                                    </div>
+                                ))}
                             {renderMessages.map(item => (
                                 <Message
                                     key={item.id}
