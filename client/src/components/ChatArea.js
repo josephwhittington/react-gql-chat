@@ -8,13 +8,14 @@ import Message from "./Message";
 
 class ChatArea extends Component {
     render() {
-        const { messages, userId, currentChatId } = this.props;
+        const { messages, userId, currentChatId, chatUpdates } = this.props;
         let renderMessages = messages;
 
         return (
             <Query
                 query={QUERY_GET_CHAT}
                 skip={!currentChatId}
+                pollInterval={1000}
                 variables={{ id: currentChatId }}
             >
                 {({ loading, data }) => {

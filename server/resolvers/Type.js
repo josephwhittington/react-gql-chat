@@ -12,26 +12,7 @@ module.exports = {
     Message: {
         id: parent => String(parent._id),
         chatId: parent => String(parent.chatId),
-        body: async (parent, args, { db }) => {
-            // Save chat
-            const chat = await db
-                .collection("chats")
-                .findOne({ _id: ObjectId(parent.chatId) });
-            // Save messages, empty array if new chat
-            const messages = chat.messages;
-            // Declare message
-            let message;
-            // If messages exist look for message in context and assign to message
-            if (messages && messages.length > 0) {
-                message = messages.filter(item => item.id === parent.id);
-            }
-            // If message[0] has a message body send that
-            if (Array.isArray(message) && message[0] && message[0].body) {
-                return message[0].body;
-            }
-            // If all else fails return null
-            return null;
-        }
+        body: parent => parent.body
     },
     Chat: {
         id: parent => String(parent._id),

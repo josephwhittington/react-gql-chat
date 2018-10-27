@@ -13,6 +13,7 @@ import ChatArea from "./ChatArea";
 import { Query, Subscription } from "react-apollo";
 import { connect } from "react-redux";
 import { setCurrentChatId } from "../actions/chatActions";
+import { addChatUpdate } from "../actions/updateActions";
 
 import { QUERY_GET_USER_CHATS, SUBSCRIPTION_NEW_MESSAGE } from "../gql";
 import { LOCALSTORAGE_USER_ID_LOCATION } from "../constants";
@@ -22,7 +23,12 @@ class PermanentDrawerLeft extends Component {
         userId: null
     };
     onSubscriptionData = data => {
-        console.log("subscriptiondata", data);
+        console.log(
+            "subscriptiondata",
+            data.subscriptionData.data.newMessage.id
+        );
+        this.props.addChatUpdate(data.subscriptionData.data.newMessage.id);
+        alert("New Message");
     };
     sendMessage = () => {
         alert("woah there clicky");
@@ -36,7 +42,7 @@ class PermanentDrawerLeft extends Component {
         }));
     }
     render() {
-        const { classes, currentChatId, history } = this.props;
+        const { classes, currentChatId, history, chatUpdates } = this.props;
         const { userId } = this.state;
 
         return (
@@ -75,6 +81,7 @@ class PermanentDrawerLeft extends Component {
                                                 classes={classes}
                                                 conversations={conversations}
                                                 history={history}
+                                                chatUpdates={chatUpdates}
                                                 currentChatId={
                                                     currentChatId
                                                         ? currentChatId
@@ -88,6 +95,7 @@ class PermanentDrawerLeft extends Component {
                                                 <ChatArea
                                                     userId={userId}
                                                     messages={messages}
+                                                    chatUpdates={chatUpdates}
                                                     currentChatId={
                                                         currentChatId &&
                                                         currentChatId
@@ -181,10 +189,11 @@ PermanentDrawerLeft.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    currentChatId: state.chat.currentChatId
+    currentChatId: state.chat.currentChatId,
+    chatUpdates: state.chatUpdates
 });
 
 export default connect(
     mapStateToProps,
-    { setCurrentChatId }
+    { setCurrentChatId, addChatUpdate }
 )(withStyles(styles)(PermanentDrawerLeft));

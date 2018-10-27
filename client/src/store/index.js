@@ -5,7 +5,8 @@ import rootReducer from "../reducers";
 
 const initialState = {
     isAuthenticated: false,
-    chat: {}
+    chat: {},
+    chatUpdates: []
 };
 
 const middleware = [thunk];
