@@ -36,7 +36,8 @@ const styles = theme => ({
     },
     messageArea: {
         width: "60%",
-        margin: 8
+        margin: 8,
+        marginLeft: 30
     }
 });
 

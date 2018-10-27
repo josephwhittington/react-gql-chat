@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 
 const customStyles = {
     messageLeft: {
@@ -17,21 +18,32 @@ const customStyles = {
         borderBottomRightRadius: 0,
         backgroundColor: "lightslategrey",
         color: "whitesmoke"
+    },
+    sender: {
+        marginLeft: 30,
+        marginBottom: 8
     }
 };
 
 const Message = props => {
     const {
         body,
-        originator: { id }
+        originator: { id, username }
     } = props.message;
+
     const style =
         props.userId === id
             ? customStyles.messageRight
-            : customStyles.messageRight;
+            : customStyles.messageLeft;
+
     return (
         <Card style={style}>
             <CardContent>{body}</CardContent>
+            {props.userId !== id && (
+                <Typography color="textSecondary" style={customStyles.sender}>
+                    {username}
+                </Typography>
+            )}
         </Card>
     );
 };

@@ -40,6 +40,7 @@ export const QUERY_GET_USER_CHATS = gql`
                 id
                 body
                 originator {
+                    id
                     username
                 }
                 createdAt
