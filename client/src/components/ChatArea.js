@@ -30,7 +30,7 @@ class ChatArea extends Component {
                             {!renderMessages ||
                                 (renderMessages.length === 0 && (
                                     <div style={{ textAlign: "center" }}>
-                                        No Messages, Ha ha neeerrd! 😂😂😂😂
+                                        😂😂 No Messages, Ha ha neeerrd! 😂😂
                                     </div>
                                 ))}
                             {renderMessages.map(item => (
