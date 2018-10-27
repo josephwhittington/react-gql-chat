@@ -63,13 +63,11 @@ class DrawerComponent extends Component {
                         />
                     ))}
                 </List>
-                {
-                    <Modal
-                        closeModal={this.closeModal}
-                        history={history}
-                        visible={visible}
-                    />
-                }
+                <Modal
+                    closeModal={this.closeModal}
+                    history={history}
+                    visible={visible}
+                />
             </Drawer>
         );
     }

@@ -4,8 +4,8 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
-import Modal from "react-awesome-modal";
-// import Modal from "react-modal";
+// import Modal from "react-awesome-modal";
+import Modal from "react-modal";
 
 import { Mutation } from "react-apollo";
 
@@ -19,6 +19,16 @@ const styles = {
     cancelButton: {
         marginTop: 10,
         marginBottom: 10
+    }
+};
+const customStyles = {
+    content: {
+        top: "50%",
+        left: "50%",
+        right: "auto",
+        bottom: "auto",
+        marginRight: "-50%",
+        transform: "translate(-50%, -50%)"
     }
 };
 
@@ -65,10 +75,8 @@ class ModalComponent extends Component {
 
         return (
             <Modal
-                visible={visible}
-                width="400"
-                height="350"
-                effect="fadeInUp"
+                isOpen={visible}
+                style={customStyles}
                 onClickAway={() => closeModal()}
             >
                 <form style={styles.modalStyles} onSubmit={this.handleSubmit}>
