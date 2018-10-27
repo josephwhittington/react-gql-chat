@@ -47,9 +47,6 @@ async function start() {
             }
         },
         context: async ({ req, connection }) => {
-            if (connection) {
-                console.log("connection", connection);
-            }
             const token = req
                 ? req.headers.authorization
                 : connection.context.authorization;

@@ -60,13 +60,13 @@ module.exports = {
         }
         return false;
     },
-    async createChat(parent, { name, originatorId, users }, { db, err }) {
+    async createChat(parent, { name, originatorUsername, users }, { db, err }) {
         // If session expired, throw error
         if (err) return err;
 
         const user = await db
             .collection("users")
-            .findOne({ _id: ObjectId(originatorId) });
+            .findOne({ username: originatorUsername });
         // If name was not sent define name
         if (!name && user) {
             name = `${capitalize(user.username)}'s Chat`;
@@ -76,7 +76,7 @@ module.exports = {
         for (u of users) {
             let u_lookup = await db
                 .collection("users")
-                .findOne({ _id: ObjectId(u) });
+                .findOne({ username: u });
 
             if (u_lookup) {
                 userArray.push(u_lookup);

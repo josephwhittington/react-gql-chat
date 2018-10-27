@@ -43,7 +43,11 @@ type Mutation {
     authenticateUser(username: String!, password: String!): AuthPayload!
     registerUser(username: String!, password: String!): User!
     deleteUser(username: String!): Boolean!
-    createChat(name: String, originatorId: ID!, users: [ID!]!): Chat!
+    createChat(
+        name: String
+        originatorUsername: String!
+        users: [String!]!
+    ): Chat!
     deleteChat(chatId: String!): Boolean!
     addUserToChat(chatId: ID!, userId: ID!): Chat!
     sendMessage(chatId: ID!, body: String!): Chat!
