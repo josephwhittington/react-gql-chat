@@ -102,6 +102,30 @@ export const MUTATION_CREATE_NEW_CHAT = gql`
     }
 `;
 
+export const MUTATION_SEND_MESSAGE = gql`
+    mutation send($chatId: ID!, $body: String!) {
+        sendMessage(chatId: $chatId, body: $body) {
+            id
+            name
+            createdAt
+            users {
+                username
+            }
+            createdBy {
+                id
+                username
+            }
+            messages {
+                body
+                createdAt
+                originator {
+                    username
+                }
+            }
+        }
+    }
+`;
+
 export const SUBSCRIPTION_NEW_MESSAGE = gql`
     subscription newChats($chatIds: [ID!]!) {
         newMessage(chatIds: $chatIds) {

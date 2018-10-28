@@ -53,15 +53,16 @@ class DrawerComponent extends Component {
                         conversation={"Start Chat (+)"}
                         onClick={this.openModal}
                     />
-                    {conversations.map(conversation => (
-                        <ListItem
-                            key={conversation.id}
-                            id={conversation.id}
-                            selectedIndex={currentChatId}
-                            conversation={conversation.name}
-                            setSelectedChat={setSelectedChat}
-                        />
-                    ))}
+                    {conversations &&
+                        conversations.map(conversation => (
+                            <ListItem
+                                key={conversation.id}
+                                id={conversation.id}
+                                selectedIndex={currentChatId}
+                                conversation={conversation.name}
+                                setSelectedChat={setSelectedChat}
+                            />
+                        ))}
                 </List>
                 <Modal
                     closeModal={this.closeModal}

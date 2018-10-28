@@ -21,7 +21,6 @@ export default combineReducers({
     },
     chat: chatReducer,
     chatUpdates: (state = [], action) => {
-        console.log("reducer running");
         switch (action.type) {
             case UPDATE_SET_CHAT_UPDATE:
                 return [...state, action.payload.chatId];

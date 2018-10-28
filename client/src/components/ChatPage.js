@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import SendIcon from "@material-ui/icons/Send";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import DrawerComponent from "./Drawer";
-import ChatArea from "./ChatArea";
+import ChatContent from "./ChatContent";
+import Loading from "./Loading";
 
 import { Query, Subscription } from "react-apollo";
 import { connect } from "react-redux";
@@ -20,7 +16,8 @@ import { LOCALSTORAGE_USER_ID_LOCATION } from "../constants";
 
 class PermanentDrawerLeft extends Component {
     state = {
-        userId: null
+        userId: null,
+        message: ""
     };
     onSubscriptionData = data => {
         console.log(
@@ -28,13 +25,28 @@ class PermanentDrawerLeft extends Component {
             data.subscriptionData.data.newMessage.id
         );
         this.props.addChatUpdate(data.subscriptionData.data.newMessage.id);
-        alert("New Message");
+        // alert("New Message");
     };
-    sendMessage = () => {
-        alert("woah there clicky");
+    sendMessage = send => {
+        console.log("typeof sned:", typeof send);
+        send()
+            .then(data => {
+                if (data) {
+                    // alert("message sent");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("you done fucked up now");
+            });
+        // alert("woah there clicky");
     };
     setSelectedChat = index => {
         this.props.setCurrentChatId(index);
+    };
+    onMessageChange = event => {
+        const { value } = event.target;
+        this.setState(() => ({ message: value }));
     };
     componentDidMount() {
         this.setState(() => ({
@@ -42,39 +54,43 @@ class PermanentDrawerLeft extends Component {
         }));
     }
     render() {
-        const { classes, currentChatId, history, chatUpdates } = this.props;
-        const { userId } = this.state;
+        const { classes, history, currentChatId, chatUpdates } = this.props;
+        const { userId, message } = this.state;
 
         return (
             <Query
                 query={QUERY_GET_USER_CHATS}
                 onCompleted={this.queryReturned}
+                pollInterval={1000}
                 variables={{
                     userId
                 }}
             >
                 {({ loading, data }) => {
                     if (loading) {
-                        return (
-                            <CircularProgress
-                                className={classes.progress}
-                                style={customStyles.loading}
-                            />
-                        );
+                        return <Loading classes={classes} />;
                     } else if (data) {
-                        const messages = data.userChats[0].messages;
+                        const messages =
+                            Array.isArray(data.userChats) &&
+                            data.userChats[0].messages;
                         const conversations = data.userChats;
+                        const defaultUserChatId =
+                            Array.isArray(data.userChats) &&
+                            data.userChats[0].id;
+
+                        console.log("data", data);
 
                         return (
                             <Subscription
                                 subscription={SUBSCRIPTION_NEW_MESSAGE}
                                 variables={{
-                                    chatIds: data.userChats.map(item => item.id)
+                                    chatIds: data.userChats
+                                        ? data.userChats.map(item => item.id)
+                                        : []
                                 }}
                                 onSubscriptionData={this.onSubscriptionData}
                             >
                                 {thing => {
-                                    console.log("thing", thing);
                                     return (
                                         <div className={classes.root}>
                                             <DrawerComponent
@@ -85,52 +101,27 @@ class PermanentDrawerLeft extends Component {
                                                 currentChatId={
                                                     currentChatId
                                                         ? currentChatId
-                                                        : data.userChats[0].id
+                                                        : defaultUserChatId
                                                 }
                                                 setSelectedChat={
                                                     this.setSelectedChat
                                                 }
                                             />
-                                            <main className={classes.content}>
-                                                <ChatArea
-                                                    userId={userId}
-                                                    messages={messages}
-                                                    chatUpdates={chatUpdates}
-                                                    currentChatId={
-                                                        currentChatId &&
-                                                        currentChatId
-                                                    }
-                                                />
-                                                <Card
-                                                    style={
-                                                        customStyles.messageInputDock
-                                                    }
-                                                >
-                                                    <TextField
-                                                        id="standard-with-placeholder"
-                                                        label="Send Message"
-                                                        placeholder="Message"
-                                                        className={
-                                                            classes.messageArea
-                                                        }
-                                                        fullWidth
-                                                        margin="normal"
-                                                        multiline
-                                                    />
-                                                    <Button
-                                                        variant="fab"
-                                                        aria-label="Send"
-                                                        className={
-                                                            classes.button
-                                                        }
-                                                        onClick={
-                                                            this.sendMessage
-                                                        }
-                                                    >
-                                                        <SendIcon />
-                                                    </Button>
-                                                </Card>
-                                            </main>
+                                            <ChatContent
+                                                classes={classes}
+                                                userId={userId}
+                                                messages={messages}
+                                                chatUpdates={chatUpdates}
+                                                currentChatId={currentChatId}
+                                                message={message}
+                                                onMessageChange={
+                                                    this.onMessageChange
+                                                }
+                                                sendMessage={this.sendMessage}
+                                                defaultUserChatId={
+                                                    defaultUserChatId
+                                                }
+                                            />
                                         </div>
                                     );
                                 }}
@@ -168,21 +159,6 @@ const styles = theme => ({
         marginLeft: 30
     }
 });
-
-const customStyles = {
-    messageInputDock: {
-        position: "fixed",
-        bottom: 0,
-        width: "100%",
-        marginLeft: -25,
-        padding: 8,
-        backgroundColor: "#ffffff"
-    },
-    loading: {
-        display: "block",
-        margin: "0 auto"
-    }
-};
 
 PermanentDrawerLeft.propTypes = {
     classes: PropTypes.object.isRequired

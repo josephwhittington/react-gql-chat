@@ -12,7 +12,9 @@ module.exports = {
     Message: {
         id: parent => String(parent._id),
         chatId: parent => String(parent.chatId),
-        body: parent => parent.body
+        body: async (parent, args, { db }) => {
+            return parent.body;
+        }
     },
     Chat: {
         id: parent => String(parent._id),
